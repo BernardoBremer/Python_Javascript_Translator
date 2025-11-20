@@ -162,4 +162,4 @@ Este proyecto fue desarrollado como parte del curso de Compiladores. Las contrib
 
 ## Licencia
 
-Proyecto académico - Universidad [Nombre]
+Proyecto académico - Universidad Cetys TIjuana
