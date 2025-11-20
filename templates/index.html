@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traductor Python → JavaScript | CETYS Universidad</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .header {
+            background: #003366;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+        .authors {
+            font-size: 0.9em;
+            color: #cccccc;
+            margin-top: 10px;
+        }
+        .container { 
+            max-width: 1400px; 
+            margin: 30px auto; 
+            background: white; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .content-header {
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            padding: 20px;
+            text-align: center;
+            color: #003366;
+        }
+        .content-header h2 {
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+        .editor-section {
+            padding: 30px;
+        }
+        .examples {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .example-btn {
+            background: #003366;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .example-btn:hover {
+            background: #ffd700;
+            color: #003366;
+            transform: translateY(-2px);
+        }
+        .editor-container { 
+            display: flex; 
+            gap: 25px; 
+            margin-bottom: 25px; 
+        }
+        .editor-panel { 
+            flex: 1;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+        }
+        .editor-panel h3 { 
+            margin-bottom: 15px; 
+            color: #003366;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        textarea { 
+            width: 100%; 
+            height: 350px; 
+            font-family: 'Consolas', 'Monaco', monospace; 
+            font-size: 14px; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            resize: vertical;
+            line-height: 1.5;
+        }
+        #pythonCode { 
+            background: #f8f8f8; 
+            border-left: 4px solid #ffd700;
+        }
+        #jsOutput { 
+            background: #f0f8ff; 
+            border-left: 4px solid #003366;
+        }
+        .button-container { 
+            text-align: center; 
+            margin: 25px 0; 
+        }
+        #translateBtn { 
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #003366; 
+            padding: 15px 40px; 
+            font-size: 18px; 
+            font-weight: 600;
+            border: none; 
+            border-radius: 30px; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        #translateBtn:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+        #translateBtn:disabled { 
+            background: #cccccc; 
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .error { 
+            color: #dc3545; 
+            background: #f8d7da; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 15px 0;
+            border-left: 4px solid #dc3545;
+        }
+        .success { 
+            color: #155724; 
+            background: #d4edda; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+        }
+        .footer {
+            background: #003366;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .cetys-logo {
+            font-weight: bold;
+            color: #ffd700;
+        }
+        @media (max-width: 768px) {
+            .editor-container {
+                flex-direction: column;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .container {
+                margin: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🐍 Traductor Python → JavaScript ES6 🚀</h1>
+        <div class="subtitle">Compiladores - Proyecto Final</div>
+        <div class="authors">
+            <strong>Autores:</strong> Bernardo Bremer & Hiram Zuñiga
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content-header">
+            <h2>Pipeline Completo de Compilación</h2>
+            <p>Análisis Léxico • Análisis Sintáctico • Análisis Semántico • Generación de Código</p>
+        </div>
+
+        <div class="editor-section">
+            <div class="examples">
+                <button class="example-btn" onclick="loadExample('function')">📝 Función Simple</button>
+                <button class="example-btn" onclick="loadExample('control')">🔀 If/Else/Elif</button>
+                <button class="example-btn" onclick="loadExample('loop')">🔄 For Loop</button>
+                <button class="example-btn" onclick="loadExample('class')">🏗️ Clase</button>
+                <button class="example-btn" onclick="loadExample('recursion')">♻️ Recursión</button>
+            </div>
+
+            <div class="editor-container">
+                <div class="editor-panel">
+                    <h3>🐍 Código Python</h3>
+                    <textarea id="pythonCode" placeholder="Escribe tu código Python aquí...">def saludar(nombre):
+    return "Hola, " + nombre
+
+resultado = saludar("CETYS")
+print(resultado)</textarea>
+                </div>
+                
+                <div class="editor-panel">
+                    <h3>⚡ JavaScript ES6</h3>
+                    <textarea id="jsOutput" readonly placeholder="El código JavaScript aparecerá aquí..."></textarea>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button id="translateBtn" onclick="translateCode()">🔄 Traducir Código</button>
+            </div>
+
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><span class="cetys-logo">CETYS Universidad</span> - Campus Tijuana</p>
+        <p>Ingeniería en Sistemas Computacionales</p>
+        <p>© 2024 - Proyecto Final de Compiladores</p>
+    </div>
+
+    <script>
+        const examples = {
+            function: `def saludar(nombre):
+    return "Hola, " + nombre
+
+def despedir(nombre):
+    return "Adiós, " + nombre
+
+mensaje1 = saludar("CETYS")
+mensaje2 = despedir("Mundo")
+print(mensaje1)
+print(mensaje2)`,
+            
+            control: `def clasificar_estudiante(calificacion):
+    if calificacion >= 90:
+        return "Excelente"
+    elif calificacion >= 80:
+        return "Muy Bien"
+    elif calificacion >= 70:
+        return "Bien"
+    else:
+        return "Necesita Mejorar"
+
+print(clasificar_estudiante(95))
+print(clasificar_estudiante(75))`,
+            
+            loop: `def tabla_multiplicar(numero):
+    print("Tabla del", numero)
+    for i in range(1, 11):
+        resultado = numero * i
+        print(numero, "x", i, "=", resultado)
+
+tabla_multiplicar(5)`,
+
+            class: `class Estudiante:
+    def saludar(self):
+        return "Hola, soy estudiante de CETYS"
+    
+    def estudiar(self):
+        return "Estoy estudiando compiladores"
+
+alumno = Estudiante()
+print(alumno.saludar())
+print(alumno.estudiar())`,
+
+            recursion: `def factorial(n):
+    if n <= 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+def fibonacci(n):
+    if n <= 1:
+        return n
+    else:
+        return fibonacci(n - 1) + fibonacci(n - 2)
+
+print("Factorial de 5:", factorial(5))
+print("Fibonacci de 7:", fibonacci(7))`
+        };
+
+        function loadExample(type) {
+            document.getElementById('pythonCode').value = examples[type];
+            document.getElementById('jsOutput').value = '';
+            document.getElementById('message').innerHTML = '';
+        }
+
+        async function translateCode() {
+            const pythonCode = document.getElementById('pythonCode').value;
+            const btn = document.getElementById('translateBtn');
+            const messageDiv = document.getElementById('message');
+            
+            if (!pythonCode.trim()) {
+                messageDiv.innerHTML = '<div class="error">❌ Por favor ingrese código Python</div>';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Compilando...';
+            messageDiv.innerHTML = '';
+
+            try {
+                const response = await fetch('/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: pythonCode })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('jsOutput').value = result.javascript;
+                    messageDiv.innerHTML = '<div class="success">✅ Compilación exitosa - Todas las fases completadas</div>';
+                } else {
+                    messageDiv.innerHTML = `<div class="error">❌ ${result.error}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="error">❌ Error de conexión: ${error.message}</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔄 Traducir Código';
+            }
+        }
+
+        // Traducir automáticamente al cargar
+        window.onload = () => translateCode();
+    </script>
+</body>
+</html>
